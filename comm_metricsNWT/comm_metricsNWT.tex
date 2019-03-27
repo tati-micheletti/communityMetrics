@@ -1,0 +1,699 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={comm\_metricsNWT},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\providecommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{comm\_metricsNWT}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{}
+    \preauthor{}\postauthor{}
+      \predate{\centering\large\emph}
+  \postdate{\par}
+    \date{01 March 2019}
+
+
+\begin{document}
+\maketitle
+
+\section{Overview}\label{overview}
+
+The \textbf{comm\_metricsNWT} module computes a serie of community
+metrics based on the bird predictions for The Northwestern Territories
+(NWT). The computed metrics are: * Expected Species Richness :
+\[S: 1 - \exp^{\lambda}\] * Shannon- Wiener diversity Index :
+\[ H^' = - \sum_{i=1}^{R} p_ilnp_i \] * Simpson diversity Index:
+\[ 1-D = \sum p_i^2 \] * Rao's Quadratic Entropy:
+\[ \sum_{i=1}^{S-1} \sum_{j=i+1}^{S} d_ijp_ip_i\]
+
+Species traits were obtained from \# Usage
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(}\StringTok{"SpaDES"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## loading reproducible     0.2.7.9000
+## loading quickPlot        0.1.6
+## loading SpaDES.core      0.2.5
+## loading SpaDES.tools     0.3.1.9000
+## loading SpaDES.addins    0.1.2
+\end{verbatim}
+
+\begin{verbatim}
+## Default paths for SpaDES directories set to:
+##   cachePath:  
+##   inputPath:  C:\Users\AARAS2\AppData\Local\Temp\RtmpoJJ9yB/SpaDES/inputs
+##   modulePath: C:\Users\AARAS2\AppData\Local\Temp\RtmpoJJ9yB/SpaDES/modules
+##   outputPath: C:\Users\AARAS2\AppData\Local\Temp\RtmpoJJ9yB/SpaDES/outputs
+## These can be changed using 'setPaths()'. See '?setPaths'.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(}\StringTok{"raster"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Loading required package: sp
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Source functions in R folder}
+\KeywordTok{invisible}\NormalTok{(}\KeywordTok{sapply}\NormalTok{(}\DataTypeTok{X =} \KeywordTok{list.files}\NormalTok{(}\KeywordTok{file.path}\NormalTok{(}\KeywordTok{getwd}\NormalTok{(), }\StringTok{"R"}\NormalTok{), }\DataTypeTok{full.names =} \OtherTok{TRUE}\NormalTok{), }\DataTypeTok{FUN =}\NormalTok{ source))}
+
+\CommentTok{# Set a storage project folder}
+\KeywordTok{setPaths}\NormalTok{(}\DataTypeTok{modulePath =} \KeywordTok{file.path}\NormalTok{(}\StringTok{"C:/Users/AARAS2/Downloads/NWT/modules"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Setting:
+##   options(
+##     spades.modulePath = 'C:/Users/AARAS2/Downloads/NWT/modules'
+##   )
+\end{verbatim}
+
+\begin{verbatim}
+## Paths set to:
+##   options(
+##     reproducible.cachePath = 'C:/Users/AARAS2/AppData/Local/Temp/RtmpgLS47z/reproducible/cache'
+##     spades.inputPath = 'C:/Users/AARAS2/AppData/Local/Temp/RtmpoJJ9yB/SpaDES/inputs'
+##     spades.outputPath = 'C:/Users/AARAS2/AppData/Local/Temp/RtmpoJJ9yB/SpaDES/outputs'
+##     spades.modulePath = 'C:/Users/AARAS2/Downloads/NWT/modules'
+##   )
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{paths <-}\StringTok{ }\KeywordTok{getPaths}\NormalTok{() }\CommentTok{# shows where the 4 relevant paths are}
+
+
+\NormalTok{times <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\DataTypeTok{start =} \DecValTok{0}\NormalTok{, }\DataTypeTok{end =} \DecValTok{3}\NormalTok{)}
+
+\NormalTok{parameters <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}
+  \DataTypeTok{.progress =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{type =} \StringTok{"text"}\NormalTok{, }\DataTypeTok{interval =} \DecValTok{1}\NormalTok{), }\CommentTok{# for a progress bar}
+\NormalTok{  ## If there are further modules, each can have its own set of parameters:}
+\DataTypeTok{birdsNWT =} \KeywordTok{list}\NormalTok{(}
+    \StringTok{"baseLayer"}\NormalTok{ =}\StringTok{ }\DecValTok{2005}\NormalTok{,}
+    \StringTok{"overwritePredictions"}\NormalTok{ =}\StringTok{ }\OtherTok{TRUE}\NormalTok{,}
+    \StringTok{"useTestSpeciesLayers"}\NormalTok{ =}\StringTok{ }\OtherTok{TRUE}\NormalTok{, }\CommentTok{# Set it to false when you actually have results from LandR_Biomass simulations to run it with}
+    \StringTok{"useParallel"}\NormalTok{ =}\StringTok{ }\OtherTok{FALSE}\NormalTok{, }\CommentTok{# Using parallel in windows is currently not working.}
+    \StringTok{"predictionInterval"}\NormalTok{ =}\StringTok{ }\DecValTok{1}
+\NormalTok{  )}
+\NormalTok{)}
+\NormalTok{.objects <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}
+  \StringTok{"birdsList"}\NormalTok{ =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"BBWA"}\NormalTok{, }\StringTok{"BOCH"}\NormalTok{,}\StringTok{"RBNU"}\NormalTok{))}
+\NormalTok{modules <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\StringTok{"birdsNWT"}\NormalTok{, }\StringTok{"comm_metricsNWT"}\NormalTok{)}
+\NormalTok{inputs <-}\StringTok{ }\KeywordTok{list}\NormalTok{()}
+\NormalTok{outputs <-}\StringTok{ }\KeywordTok{list}\NormalTok{()}
+
+\NormalTok{comm_metricsNWT <-}\StringTok{ }\KeywordTok{simInitAndSpades}\NormalTok{(}\DataTypeTok{times =}\NormalTok{ times, }\DataTypeTok{params =}\NormalTok{ parameters, }\DataTypeTok{modules =}\NormalTok{ modules,}
+                 \DataTypeTok{objects =}\NormalTok{ .objects, }\DataTypeTok{loadOrder =} \KeywordTok{c}\NormalTok{(}\StringTok{"birdsNWT"}\NormalTok{,}\StringTok{"comm_metricsNWT"}\NormalTok{), }\DataTypeTok{debug =} \DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Setting:
+##   options(
+##     reproducible.cachePath = 'C:/Users/AARAS2/AppData/Local/Temp/RtmpgLS47z/reproducible/cache'
+##     spades.inputPath = 'C:/Users/AARAS2/AppData/Local/Temp/RtmpoJJ9yB/SpaDES/inputs'
+##     spades.outputPath = 'C:/Users/AARAS2/AppData/Local/Temp/RtmpoJJ9yB/SpaDES/outputs'
+##     spades.modulePath = 'C:/Users/AARAS2/Downloads/NWT/modules'
+##   )
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: crayon
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: data.table
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'data.table'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:raster':
+## 
+##     shift
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: dplyr
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'dplyr'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:data.table':
+## 
+##     between, first, last
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:raster':
+## 
+##     intersect, select, union
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: gbm
+\end{verbatim}
+
+\begin{verbatim}
+## Loaded gbm 2.1.5
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: googledrive
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: plyr
+\end{verbatim}
+
+\begin{verbatim}
+## -------------------------------------------------------------------------
+\end{verbatim}
+
+\begin{verbatim}
+## You have loaded plyr after dplyr - this is likely to cause problems.
+## If you need functions from both plyr and dplyr, please load plyr first, then dplyr:
+## library(plyr); library(dplyr)
+\end{verbatim}
+
+\begin{verbatim}
+## -------------------------------------------------------------------------
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'plyr'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:dplyr':
+## 
+##     arrange, count, desc, failwith, id, mutate, rename, summarise,
+##     summarize
+\end{verbatim}
+
+\begin{verbatim}
+## defineParameter: 'nCores' is not of specified type 'character|numeric'.
+\end{verbatim}
+
+\begin{verbatim}
+## defineParameter: 'baseLayer' is not of specified type 'character'.
+\end{verbatim}
+
+\begin{verbatim}
+## birdsNWT: module code: birdPrediction is declared in metadata outputObjects, but is not assigned in the module
+\end{verbatim}
+
+\begin{verbatim}
+## birdsNWT: module code: wetlandRaster, cloudFolderID, urlModels, urlStaticLayers are declared in metadata inputObjects, but no default(s) are provided in .inputObjects
+\end{verbatim}
+
+\begin{verbatim}
+## birdsNWT: module code: wetlandRaster, cloudFolderID, urlModels, urlStaticLayers are declared in metadata inputObjects, but are not used in the module
+\end{verbatim}
+
+\begin{verbatim}
+## birdsNWT: module code: classifyWetlands: parameter 'rasterToMatch' may not be used
+\end{verbatim}
+
+\begin{verbatim}
+## birdsNWT: module code: corePrediction : <anonymous>: parameter 'e' may not be used
+\end{verbatim}
+
+\begin{verbatim}
+## birdsNWT: module code: createSpeciesStackLayer : <anonymous>: local variable 'speciesLayerNames' assigned but may not be used
+\end{verbatim}
+
+\begin{verbatim}
+## birdsNWT: module code: createSpeciesStackLayer: parameter 'pathData' may not be used
+\end{verbatim}
+
+\begin{verbatim}
+## birdsNWT: module code: loadBirdModels: parameter 'cloudFolderID' may not be used
+\end{verbatim}
+
+\begin{verbatim}
+## birdsNWT: module code: loadTestSpeciesLayers: parameter 'modelList' may not be used
+\end{verbatim}
+
+\begin{verbatim}
+## birdsNWT: module code: loadTestSpeciesLayers: parameter 'successionTables' may not be used
+\end{verbatim}
+
+\begin{verbatim}
+## birdsNWT: outputObjects: Year0 is assigned to sim inside doEvent.birdsNWT, but is not declared in metadata outputObjects
+\end{verbatim}
+
+\begin{verbatim}
+## birdsNWT: inputObjects: simulatedBiomassMap, cohortData, pixelGroupMap, sppEquiv, Year0 are used from sim inside doEvent.birdsNWT, but are not declared in metadata inputObjects
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in FUN(X[[i]], ...): is.na() applied to non-(list or vector) of
+## type 'closure'
+\end{verbatim}
+
+\begin{verbatim}
+## comm_metricsNWT: module code: birdPrediction, birdsList are declared in metadata inputObjects, but no default(s) are provided in .inputObjects
+\end{verbatim}
+
+\begin{verbatim}
+## comm_metricsNWT: module code: birdsList is declared in metadata inputObjects, but is not used in the module
+\end{verbatim}
+
+\begin{verbatim}
+## comm_metricsNWT: outputObjects: 0 is assigned to sim inside calcDiversity, but is not declared in metadata outputObjects
+\end{verbatim}
+
+\begin{verbatim}
+## comm_metricsNWT: outputObjects: currentDiversityRasters is assigned to sim inside calcDiversityIndices, but is not declared in metadata outputObjects
+\end{verbatim}
+
+\begin{verbatim}
+## comm_metricsNWT: inputObjects: birdList is assigned to sim inside .inputObjects, but is not declared in metadata inputObjects
+\end{verbatim}
+
+\begin{verbatim}
+## comm_metricsNWT: inputObjects: 0, currentDiversityRasters are used from sim inside calcDiversity, but are not declared in metadata inputObjects
+\end{verbatim}
+
+\begin{verbatim}
+## comm_metricsNWT: inputObjects: currentDiversityRasters is used from sim inside diversityPlot, but is not declared in metadata inputObjects
+\end{verbatim}
+
+\begin{verbatim}
+## comm_metricsNWT: inputObjects: currentDiversityRasters is used from sim inside diversityStats, but is not declared in metadata inputObjects
+\end{verbatim}
+
+\begin{verbatim}
+## comm_metricsNWT: inputObjects: currentDiversityRasters is used from sim inside doEvent.comm_metricsNWT, but is not declared in metadata inputObjects
+\end{verbatim}
+
+\begin{verbatim}
+## Running .inputObjects for birdsNWT
+\end{verbatim}
+
+\begin{verbatim}
+## birdsNWT: using dataPath 'C:/Users/AARAS2/Downloads/NWT/modules/birdsNWT/data'.
+\end{verbatim}
+
+\begin{verbatim}
+## No specific study area was provided. Croping to the Edehzhie Indigenous Protected Area (Southern NWT)
+\end{verbatim}
+
+\begin{verbatim}
+##   loading cached result from previous prepInputs call, adding to memoised copy
+##   loading cached result from previous prepInputs call, adding to memoised copy
+\end{verbatim}
+
+\begin{verbatim}
+##   loading cached result from previous prepInputsLayers_DUCKS call, adding to memoised copy
+\end{verbatim}
+
+\begin{verbatim}
+##   loading cached result from previous classifyWetlands call, adding to memoised copy
+\end{verbatim}
+
+\begin{verbatim}
+##   loading cached result from previous cropInputs call, adding to memoised copy
+\end{verbatim}
+
+\begin{verbatim}
+##   loading cached result from previous projectInputs call, adding to memoised copy
+\end{verbatim}
+
+\begin{verbatim}
+##   loading cached result from previous maskInputs call, adding to memoised copy
+\end{verbatim}
+
+\begin{verbatim}
+## Running .inputObjects for comm_metricsNWT
+\end{verbatim}
+
+\begin{verbatim}
+## [1] "13:00:33 | elpsd: 0.001 secs | 0 checkpoint init 5"
+## [1] "13:00:33 | elpsd: 0.004 secs | 0 save init 5"
+## [1] "13:00:33 | elpsd: 0.0029 secs | 0 progress init 5"
+## [1] "13:00:33 | elpsd: 0.001 secs | 0 load init 5"
+## [1] "13:00:33 | elpsd: 0.001 secs | 0 birdsNWT init 5"
+## [1] "13:00:33 | elpsd: 0.001 secs | 0 comm_metricsNWT init 5"
+## [1] "13:00:33 | elpsd: 0.001 secs | 0 birdsNWT loadModels 5"
+\end{verbatim}
+
+\begin{verbatim}
+##   loading cached result from previous loadBirdModels call, adding to memoised copy
+\end{verbatim}
+
+\begin{verbatim}
+## Bird models loaded for: 
+## BBWA
+## BOCH
+## RBNU
+\end{verbatim}
+
+\begin{verbatim}
+## [1] "13:00:42 | elpsd: 9.4 secs | 0 birdsNWT loadFixedLayers 5"
+\end{verbatim}
+
+\begin{verbatim}
+##   loading cached result from previous loadStaticLayers call, adding to memoised copy
+\end{verbatim}
+
+\begin{verbatim}
+## The following static layers have been loaded: 
+## wat
+## led25
+## urbag
+## dev25
+## landform
+\end{verbatim}
+
+\begin{verbatim}
+## [1] "13:00:43 | elpsd: 0.87 secs | 0 birdsNWT gettingData 5"
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: magrittr
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'magrittr'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:raster':
+## 
+##     extract
+\end{verbatim}
+
+\begin{verbatim}
+## cohortData not supplied by another module. Will try using files in inputPath(sim)
+\end{verbatim}
+
+\begin{verbatim}
+## pixelGroupMap not supplied by another module. Will try using files in inputPath(sim)
+\end{verbatim}
+
+\begin{verbatim}
+## simulatedBiomassMap not supplied by another module. Will try using files in inputPath(sim)
+\end{verbatim}
+
+\begin{verbatim}
+## [1] "13:00:43 | elpsd: 0.086 secs | 0 birdsNWT predictBirds 10"
+\end{verbatim}
+
+\begin{verbatim}
+## Using test layers for species. Predictions will be static and identical to original data.
+\end{verbatim}
+
+\begin{verbatim}
+##   loading cached result from previous loadTestSpeciesLayers call, adding to memoised copy
+\end{verbatim}
+
+\begin{verbatim}
+##   loading cached result from previous predictDensities call, adding to memoised copy
+\end{verbatim}
+
+\begin{verbatim}
+## [1] "13:00:57 | elpsd: 14 secs | 0 comm_metricsNWT calcDiversity 10"
+## [1] "13:01:06 | elpsd: 9.4 secs | 0 comm_metricsNWT diversityStats 10"
+## [1] "13:01:07 | elpsd: 0.45 secs | 1 birdsNWT gettingData 5"
+\end{verbatim}
+
+\begin{verbatim}
+## cohortData not supplied by another module. Will try using files in inputPath(sim)
+\end{verbatim}
+
+\begin{verbatim}
+## pixelGroupMap not supplied by another module. Will try using files in inputPath(sim)
+\end{verbatim}
+
+\begin{verbatim}
+## simulatedBiomassMap not supplied by another module. Will try using files in inputPath(sim)
+\end{verbatim}
+
+\begin{verbatim}
+## [1] "13:01:07 | elpsd: 0.05 secs | 1 birdsNWT predictBirds 5"
+\end{verbatim}
+
+\begin{verbatim}
+## Using test layers for species. Predictions will be static and identical to original data.
+\end{verbatim}
+
+\begin{verbatim}
+##   loading memoised result from previous loadTestSpeciesLayers call.
+\end{verbatim}
+
+\begin{verbatim}
+##   loading cached result from previous predictDensities call, adding to memoised copy
+\end{verbatim}
+
+\begin{verbatim}
+## [1] "13:01:20 | elpsd: 13 secs | 1 comm_metricsNWT plot 10"
+## [1] "13:01:20 | elpsd: 0.46 secs | 1 comm_metricsNWT calcDiversity 10"
+## [1] "13:01:29 | elpsd: 8.7 secs | 1 comm_metricsNWT diversityStats 10"
+## [1] "13:01:29 | elpsd: 0.24 secs | 2 birdsNWT gettingData 5"
+\end{verbatim}
+
+\begin{verbatim}
+## cohortData not supplied by another module. Will try using files in inputPath(sim)
+\end{verbatim}
+
+\begin{verbatim}
+## pixelGroupMap not supplied by another module. Will try using files in inputPath(sim)
+\end{verbatim}
+
+\begin{verbatim}
+## simulatedBiomassMap not supplied by another module. Will try using files in inputPath(sim)
+\end{verbatim}
+
+\begin{verbatim}
+## [1] "13:01:29 | elpsd: 0.035 secs | 2 birdsNWT predictBirds 5"
+\end{verbatim}
+
+\begin{verbatim}
+## Using test layers for species. Predictions will be static and identical to original data.
+\end{verbatim}
+
+\begin{verbatim}
+##   loading memoised result from previous loadTestSpeciesLayers call.
+\end{verbatim}
+
+\begin{verbatim}
+##   loading cached result from previous predictDensities call, adding to memoised copy
+\end{verbatim}
+
+\begin{verbatim}
+## [1] "13:01:41 | elpsd: 12 secs | 2 comm_metricsNWT plot 10"
+## [1] "13:01:42 | elpsd: 0.44 secs | 2 comm_metricsNWT calcDiversity 10"
+## [1] "13:01:51 | elpsd: 8.8 secs | 2 comm_metricsNWT diversityStats 10"
+## [1] "13:01:51 | elpsd: 0.23 secs | 3 birdsNWT gettingData 5"
+\end{verbatim}
+
+\begin{verbatim}
+## cohortData not supplied by another module. Will try using files in inputPath(sim)
+\end{verbatim}
+
+\begin{verbatim}
+## pixelGroupMap not supplied by another module. Will try using files in inputPath(sim)
+\end{verbatim}
+
+\begin{verbatim}
+## simulatedBiomassMap not supplied by another module. Will try using files in inputPath(sim)
+\end{verbatim}
+
+\begin{verbatim}
+## [1] "13:01:51 | elpsd: 0.066 secs | 3 birdsNWT predictBirds 5"
+\end{verbatim}
+
+\begin{verbatim}
+## Using test layers for species. Predictions will be static and identical to original data.
+\end{verbatim}
+
+\begin{verbatim}
+##   loading memoised result from previous loadTestSpeciesLayers call.
+\end{verbatim}
+
+\begin{verbatim}
+##   loading cached result from previous predictDensities call, adding to memoised copy
+\end{verbatim}
+
+\includegraphics{comm_metricsNWT_files/figure-latex/module_usage-1.pdf}
+
+\begin{verbatim}
+## [1] "13:02:05 | elpsd: 14 secs | 3 comm_metricsNWT plot 10"
+## [1] "13:02:06 | elpsd: 0.23 secs | 3 comm_metricsNWT calcDiversity 10"
+## [1] "13:02:15 | elpsd: 9.7 secs | 3 comm_metricsNWT diversityStats 10"
+\end{verbatim}
+
+\section{Events}\label{events}
+
+Describe what happens for each event type.
+
+\subsection{Plotting}\label{plotting}
+
+Write what is plotted.
+
+\subsection{Saving}\label{saving}
+
+Write what is saved.
+
+\section{Data dependencies}\label{data-dependencies}
+
+\subsection{Input data}\label{input-data}
+
+How to obtain input data, and a description of the data required by the
+module. If \texttt{sourceURL} is specified,
+\texttt{downloadData("comm\_metricsNWT",\ "path/to/modules/dir")} may be
+sufficient.
+
+\subsection{Output data}\label{output-data}
+
+Description of the module outputs.
+
+\section{Links to other modules}\label{links-to-other-modules}
+
+Describe any anticipated linkages to other modules.
+
+
+\end{document}

@@ -1,0 +1,84 @@
+spp,Migration,Feeding ,Sustrate Breed,Foragin type,Nesting Substrate,Nesting Habitat
+ALFL,Neotropical migrant,Insectivore,Air,Sallier,Shrub ,Treed/shrubby swamp
+AMCR,Short distance migrant,Omnivore,Ground,Forager,Coniferous tree,Woodlands
+AMGO,Short distance migrant,Omnivore,Lower canopy / shrub,Forager,Deciduous tree,Early successional
+AMRE,Neotropical migrant,Insectivore,Lower canopy / shrub,Gleaner,Deciduous tree,Deciduous woodlands
+AMRO,Short distance migrant,Omnivore,Lower canopy / shrub,Forager,Tree - non-specific,Urban
+BAOR,Neotropical migrant,Omnivore,Upper canopy,Forager,Deciduous tree,Deciduous woodlands
+BAWW,Neotropical migrant,Insectivore,Bark,Gleaner,Ground,Mixed woodlands
+BBWA,Neotropical migrant,Insectivore,Upper canopy,Gleaner,Coniferous tree,Coniferous woodlands
+BCCH,Resident,Insectivore,Lower canopy / shrub,Gleaner,Snag,Mixed woodlands
+BHCO,Short distance migrant,Omnivore,Ground,Forager,Deciduous tree,Agricultural
+BHVI,Short distance migrant,Insectivore,Lower canopy / shrub,Gleaner,Coniferous tree,Mixed woodlands
+BLBW,Neotropical migrant,Insectivore,Upper canopy,Gleaner,Coniferous tree,Coniferous woodlands
+BLJA,Short distance migrant,Omnivore,Ground,Forager,Coniferous tree,Woodlands
+BLPW,Neotropical migrant,Insectivore,Upper canopy,Gleaner,Coniferous tree,Coniferous woodlands
+BOCH,Resident,Insectivore,Lower canopy / shrub,Gleaner,Snag,Coniferous woodlands
+BRBL,Short distance migrant,Omnivore,Ground,Forager,Ground,Agricultural
+BRCR,Short distance migrant,Insectivore,Bark,Gleaner,Snag,Mixed woodlands
+BRTH,Short distance migrant,Omnivore,Ground,Forager,Shrub,Early successional
+BTNW,Neotropical migrant,Insectivore,Upper canopy,Gleaner,Coniferous tree,Coniferous woodlands
+CAWA,Neotropical migrant,Insectivore,Lower canopy / shrub,Gleaner,Ground,Deciduous woodlands
+CCSP,Neotropical migrant,Omnivore,Ground,Forager,Shrub,Early successional
+CEDW,Short distance migrant,Insectivore,Air,Sallier,Deciduous tree,Open woodlands
+CHSP,Short distance migrant,Omnivore,Ground,Forager,Coniferous tree,Open woodlands
+CMWA,Neotropical migrant,Insectivore,Upper canopy,Gleaner,Coniferous tree,Coniferous woodlands
+COGR,Short distance migrant,Omnivore,Ground,Forager,Coniferous tree,Woodlands
+CONW,Neotropical migrant,Insectivore,Ground,Gleaner,Ground,Bogs
+CORA,Resident,Omnivore,Ground,Scavenger,Cliff,Woodlands
+COYE,Neotropical migrant,Insectivore,Lower canopy / shrub,Gleaner,Ground,Marsh
+CSWA,Neotropical migrant,Insectivore,Lower canopy / shrub,Gleaner,Shrub,Early successional
+DEJU,Short distance migrant,Omnivore,Ground,Forager,Ground,Coniferous woodlands
+EAKI,Neotropical migrant,Insectivore,Air,Sallier,Deciduous tree,Early successional
+EAPH,Short distance migrant,Insectivore,Air,Sallier,Human structure,Woodlands
+EVGR,Nomadic,Omnivore,Upper canopy,Forager,Coniferous tree,Mixed woodlands
+FOSP,Short distance migrant,Omnivore,Ground,Forager,Ground,Woodlands
+GCKI,Short distance migrant,Insectivore,Lower canopy / shrub,Gleaner,Coniferous tree,Coniferous woodlands
+GRAJ,Resident,Omnivore,Upper canopy,Forager,Coniferous tree,Coniferous woodlands
+GRCA,Short distance migrant,Omnivore,Ground,Forager,Shrub,Early successional
+HAFL,Neotropical migrant,Insectivore,Air,Sallier,Coniferous tree,Coniferous woodlands
+HETH,Short distance migrant,Insectivore,Ground,Gleaner,Ground,Coniferous woodlands
+HOLA,Short distance migrant,Omnivore,Ground,Gleaner,Ground,Agricultural
+HOWR,Short distance migrant,Insectivore,Lower canopy / shrub,Gleaner,Human structure,Early successional
+LCSP,Short distance migrant,Omnivore,Ground,Forager,Ground,Meadows
+LEFL,Neotropical migrant,Insectivore,Air,Sallier,Deciduous tree,Deciduous woodlands
+LISP,Short distance migrant,Omnivore,Ground,Forager,Ground,Bogs
+MAWA,Neotropical migrant,Insectivore,Lower canopy / shrub,Gleaner,Coniferous tree,Mixed woodlands
+MOWA,Neotropical migrant,Insectivore,Ground,Gleaner,Ground,Open woodlands
+NOWA,Neotropical migrant,Insectivore,Freshwater,Gleaner,Ground,Treed/shrubby swamp
+OCWA,Short distance migrant,Insectivore,Lower canopy / shrub,Gleaner,Ground,Open woodlands
+OSFL,Neotropical migrant,Insectivore,Air,Sallier,Coniferous tree,Bogs
+OVEN,Neotropical migrant,Insectivore,Ground,Gleaner,Ground,Deciduous woodlands
+PAWA,Short distance migrant,Insectivore,Ground,Gleaner,Ground,Bogs
+PHVI,Neotropical migrant,Insectivore,Upper canopy,Gleaner,Deciduous tree,Deciduous woodlands
+PIGR,Nomadic,Omnivore,Upper canopy,Forager,Coniferous tree,Coniferous woodlands
+PISI,Nomadic,Omnivore,Upper canopy,Forager,Coniferous tree,Coniferous woodlands
+PUFI,Short distance migrant,Granivore,Upper canopy,Gleaner,Coniferous tree,Mixed woodlands
+RBGR,Neotropical migrant,Omnivore,Upper canopy,Forager,Deciduous tree,Deciduous woodlands
+RBNU,Resident,Insectivore,Bark,Gleaner,Snag,Mixed woodlands
+RCKI,Short distance migrant,Insectivore,Upper canopy,Gleaner,Coniferous tree,Coniferous woodlands
+REVI,Neotropical migrant,Insectivore,Upper canopy,Gleaner,Deciduous tree,Deciduous woodlands
+RUBL,Short distance migrant,Insectivore,Ground,Gleaner,Coniferous tree,Woodlands
+RWBL,Short distance migrant,Omnivore,Ground,Forager,Grass,Marsh
+SAVS,Short distance migrant,Omnivore,Ground,Forager,Ground,Agricultural
+SEWR,Short distance migrant,Insectivore,Ground,Gleaner,Grass,Meadows
+SOSP,Short distance migrant,Omnivore,Lower canopy / shrub,Forager,Ground,Early successional
+SWSP,Short distance migrant,Omnivore,Ground,Forager,Grass,Marsh
+SWTH,Neotropical migrant,Omnivore,Ground,Forager,Coniferous tree,Mixed woodlands
+TEWA,Neotropical migrant,Insectivore,Upper canopy,Gleaner,Ground,Bogs
+TOWA,Neotropical migrant,Insectivore,Upper canopy,Gleaner,Coniferous tree,Coniferous woodlands
+TRES,Short distance migrant,Insectivore,Air,Screener,Snag,Treed/shrubby swamp
+VATH,Short distance migrant,Insectivore,Ground,Gleaner,Coniferous tree,Woodlands
+VEER,Neotropical migrant,Omnivore,Ground,Forager,Shrub,Mixed woodlands
+VESP,Short distance migrant,Omnivore,Ground,Forager,Ground,Agricultural
+WAVI,Neotropical migrant,Insectivore,Upper canopy,Gleaner,Deciduous tree,Open woodlands
+WBNU,Resident,Insectivore,Bark,Gleaner,Deciduous tree,Deciduous woodlands
+WCSP,Short distance migrant,Omnivore,Ground,Forager,Ground,Bogs
+WETA,Neotropical migrant,Omnivore,Upper canopy,Forager,Coniferous tree,Coniferous woodlands
+WEWP,Neotropical migrant,Insectivore,Air,Sallier,Coniferous tree,Open woodlands
+WIWA,Short distance migrant,Insectivore,Ground,Gleaner,Snag,Coniferous woodlands
+WIWR,Neotropical migrant,Insectivore,Lower canopy / shrub,Gleaner,Ground,Treed/shrubby swamp
+WTSP,Short distance migrant,Omnivore,Ground,Forager,Ground,Early successional
+WWCR,Nomadic,Omnivore,Upper canopy,Forager,Coniferous tree,Coniferous woodlands
+YBFL,Neotropical migrant,Insectivore,Air,Sallier,Ground,Bogs
+YRWA,Short distance migrant,Insectivore,Lower canopy / shrub,Gleaner,Coniferous tree,Coniferous woodlands
