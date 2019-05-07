@@ -1,0 +1,2 @@
+"file" "checksum" "filesize" "algorithm"
+"sp_traitsNWT.csv" "cc8e2a606ce19d45" "6936" "xxhash64"
