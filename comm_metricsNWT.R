@@ -176,6 +176,7 @@ Save <- function(sim){
 
  if (!suppliedElsewhere(object = "studyArea", sim = sim))
   {
+
     sim[["studyArea"]] <- cloudCache(prepInputs,
                                     url = "https://drive.google.com/open?id=1LUxoY2-pgkCmmNH5goagBp3IMpj6YrdU",
                                     destinationPath = dataPath(sim), 
@@ -192,12 +193,10 @@ Save <- function(sim){
                                     omitArgs = c("destinationPath", "cloudFolderID", "useCloud", "overwrite", "filename2"))
   }
  if (!suppliedElsewhere("caribouArea1", sim)){
-   
-    sim$caribouArea1 <- cloudCache(prepInputs,
+    sim$caribouArea1 <- Cache(prepInputs,
                                    url = extractURL("caribouArea1"), studyArea = sim$studyArea,
-                                   destinationPath = dataPath(sim), filename2 = "caribouArea1",
-                                   rasterToMatch = sim$birdPrediction,
-                                   useCloud = FALSE, cloudFolderID = NULL)
+                                   destinationPath = dataPath(sim), filename2 = NULL,
+                                   rasterToMatch = sim$birdPrediction)
     }      
  
  return(invisible(sim))

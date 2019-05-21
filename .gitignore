@@ -32,7 +32,8 @@ vignettes/*.pdf
   data/
   data/*.*
   /data/*.*
-  
+  /data
+  /data/
   
   # Temporary files created by R markdown
   *.utf8.md
@@ -41,3 +42,6 @@ vignettes/*.pdf
 # Shiny token, see https://shiny.rstudio.com/articles/shinyapps.html
 rsconnect/
   .Rproj.user
+
+data/NWT_Regions_2015_LCs_DC_SS_combined_NT1_clip_inc_Yukon.*
+data/caribouArea1.*
