@@ -42,7 +42,7 @@ defineModule(sim, list(
     #createsOutput("objectName", "objectClass", "output object description", ...),
     createsOutput(objectName = "currentdiversityRasters", objectClass = "RasterStack", 
                   desc = "List of Species richness, Shannon-weiner and Simpson diversity indices for the current year"),
-    createsOutput(objectName = "diversityStats", objectClass = "data.frame", desc = "mean and standar deviation for each diversity indices")
+    createsOutput(objectName = "diversityStatistics", objectClass = "data.frame", desc = "mean and standar deviation for each diversity indices")
     # createsOutput(objectName = "raosentropy", objectClass = "list", desc ="List per year of Raos Entropy")
   )
 ))
@@ -100,8 +100,9 @@ doEvent.comm_metricsNWT = function(sim, eventTime, eventType) {
 Init<- function(sim){
   sim$currentDiversityRasters <- stack()
   #names(sim$currentdiversityRasters) <- c('shannon', 'simpson', 'richness', 'rao_entropy')
-  sim$diversityStats <- data.frame(year = integer(), shannon_mean = double(), simpson_mean = double(), richness_mean = double(), raoentropy= double())
-  sim$diversityByPolygon[[as.character(time(sim))]] <- list()
+  sim$diversityStatistics <- data.frame(year = integer(), shannon_mean = double(), 
+                                   simpson_mean = double(), richness_mean = double()) #, raoentropy= double()
+  # sim$diversityByPolygon[[as.character(time(sim))]] <- list()
   #sim$diversityByPolygon[[paste0("Year", time(sim))]] <- list()
   return (invisible(sim))
 }
@@ -113,45 +114,58 @@ diversityPlot = function(sim){
 }   
 
 calcDiversityIndices <- function(sim){
-  birdpredsp <-(sim$birdPrediction[[length(sim$birdPrediction)]])
-  bird.abun <- raster::stack(birdpredsp)
-  cellSizeHA <- prod(res(bird.abun))/10000
-  p <- bird.abun /sum(bird.abun)
+  if (is(sim$birdPrediction, "list")){
+    birdpredsp <- sim$birdPrediction
+  } else {
+    birdpredsp <-(sim$birdPrediction[[length(sim$birdPrediction)]])
+  }
+  bird.abun <- lapply(X = birdpredsp, function(eachRas){
+    vect <- raster::getValues(x = eachRas)
+    return(vect)
+  })
   
-  shannonRaster <- shannon(p)
+  stk <- raster::stack(birdpredsp)
+  cellSizeHA <- prod(res(stk))/10000
+  bird.abun <- data.table::data.table(do.call(cbind, bird.abun))
+  bird.abun[, Sum := rowSums(bird.abun, na.rm = TRUE)]
+  cols <- names(birdpredsp)
+  p <- bird.abun[, lapply(.SD, function(sp){sp/Sum}), .SDcols = cols]
+
+  shannonRaster <- raster::setValues(raster::raster(birdpredsp[[1]]), values = apply(X = p, MARGIN = 1, shannon))
+  simpsonRaster <- raster::setValues(raster::raster(birdpredsp[[1]]), apply(X = p, MARGIN = 1, simpson))
+  richnessRaster <- raster::setValues(raster::raster(birdpredsp[[1]]), apply(X = p, MARGIN = 1, richness, cellSizeHA)) #second argument should be cell size
+  # SPP <- names(birdpredsp)
+  # dist.m <- sim$dist.m[SPP, SPP]  #requires that all species in p be in dist.m
+  # raoRaster <- raoEntropyC(dist.m, p) # TOOK OUT FOR TIME SAVING FOR NOW:: NEED TO [ FIX ] convert to data.table compatible
+
+  sim$currentDiversityRasters <- stack(shannonRaster,simpsonRaster,richnessRaster) #, raoRaster
+  names(sim$currentDiversityRasters) <- c("shannonRaster","simpsonRaster","richnessRaster") #, "raoRaster"
   
-  simpsonRaster <- simpson(p)
-  
-  richnessRaster <- richness(bird.abun, cellSizeHA) #second argument should be cell size
-  
-  SPP <- names(birdpredsp)
-  dist.m <- sim$dist.m[SPP,SPP]  #requires that all species in p be in dist.m
-  raoRaster <- raoEntropyC(dist.m, p)
-  
-  sim$currentDiversityRasters <- stack(shannonRaster,simpsonRaster,richnessRaster, raoRaster)
-  names(sim$currentDiversityRasters) <- c("shannonRaster","simpsonRaster","richnessRaster", "raoRaster")
+  lapply(names(sim$currentDiversityRasters), function(rasName){
+    writeRaster(x = sim$currentDiversityRasters[[rasName]], 
+                filename = file.path(outputPath(sim), paste0(rasName, "_", time(sim))), format = "GTiff")
+  })
    return(invisible(sim))
 }
 
 diversityStats <- function(sim){
-  sim$diversityStats <- rbind(
-    sim$diversityStats,
-    data.frame(indiceName = c("shannonRaster","simpsonRaster","richnessRaster", "raoRaster"),
-      year = rep(time(sim), length(cellStats(sim$currentDiversityRasters, "mean"))),
-      diversity_mean = cellStats(sim$currentDiversityRasters,"mean"))
-  )
-  
- #browser()
+  sim$diversityStatistics <- rbind(sim$diversityStats,
+                              data.frame(indiceName = names(sim$currentDiversityRasters),
+                                         year = rep(time(sim), length(cellStats(sim$currentDiversityRasters, "mean"))),
+                                         diversity_mean = cellStats(sim$currentDiversityRasters,"mean")))
+
   sim$diversityByPolygon[[paste0("Year", as.character(time(sim)))]] <- extract(sim$currentDiversityRasters, 
                                                                                sim$caribouArea1, fun=mean, na.rm=TRUE)
+  rownames(sim$diversityByPolygon[[paste0("Year", as.character(time(sim)))]]) <- sim$caribouArea1@data$NAME
   return(invisible(sim))
 }
 
 Save <- function(sim){
+  # WRONG. Needs to lapply through the layers 
   dir <- file.path(outputPath(sim), "diverstiyIndices")
   dir.create(dir,showWarnings = FALSE)
   fname <- file.path(dir, paste0("diversityIndicesYear", time(sim),".tif"))
-  writeRaster(sim$currentDiversityRasters, filename=fname, 
+  writeRaster(sim$currentDiversityRasters, filename=fname,
                format ="GTiff", overwrite=TRUE)
   return(invisible(sim))
 }
@@ -177,27 +191,31 @@ Save <- function(sim){
  if (!suppliedElsewhere(object = "studyArea", sim = sim))
   {
 
-    sim[["studyArea"]] <- cloudCache(prepInputs,
-                                    url = "https://drive.google.com/open?id=1LUxoY2-pgkCmmNH5goagBp3IMpj6YrdU",
-                                    destinationPath = dataPath(sim), 
-                                    cloudFolderID = sim$cloudFolderID,
-                                    omitArgs = c("destinationPath", "cloudFolderID"))
+    sim[["studyArea"]] <- prepInputs(url = "https://drive.google.com/open?id=1LUxoY2-pgkCmmNH5goagBp3IMpj6YrdU",
+                                    destinationPath = dataPath(sim), filename2 = NULL)
     
  }
   if (!suppliedElsewhere(object = "rasterToMatch", sim = sim)){
-    sim$rasterToMatch <- cloudCache(prepInputs, url = "https://drive.google.com/open?id=1fo08FMACr_aTV03lteQ7KsaoN9xGx1Df", 
+    sim$rasterToMatch <- prepInputs(url = "https://drive.google.com/open?id=1fo08FMACr_aTV03lteQ7KsaoN9xGx1Df", 
                                     studyArea = sim$studyArea,
-                                    targetFile = "RTM.tif", destinationPath = dataPath(sim), 
-                                    useCloud = getOption("reproducible.useCloud", FALSE),
-                                    cloudFolderID = sim$cloudFolderID, overwrite = TRUE, filename2 = NULL,
-                                    omitArgs = c("destinationPath", "cloudFolderID", "useCloud", "overwrite", "filename2"))
+                                    targetFile = "RTM.tif", destinationPath = dataPath(sim),
+                                    overwrite = TRUE, filename2 = NULL)
   }
  if (!suppliedElsewhere("caribouArea1", sim)){
-    sim$caribouArea1 <- Cache(prepInputs,
-                                   url = extractURL("caribouArea1"), studyArea = sim$studyArea,
+   if (is(sim$birdPrediction[[1]], "RasterLayer")){
+     rtm <- sim$birdPrediction[[1]]
+   } else {
+     if (is(sim$birdPrediction, "RasterLayer"))
+     {
+       rtm <- sim$birdPrediction
+     } else {
+       rtm <- sim$rasterToMatch
+     }
+     }
+    sim$caribouArea1 <- prepInputs(url = extractURL("caribouArea1"), studyArea = sim$studyArea,
                                    destinationPath = dataPath(sim), filename2 = NULL,
-                                   rasterToMatch = sim$birdPrediction)
-    }      
+                                   rasterToMatch = rtm)
+    }
  
  return(invisible(sim))
 }
