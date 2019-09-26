@@ -115,7 +115,13 @@ diversityPlot = function(sim){
 
 calcDiversityIndices <- function(sim){
   if (is(sim$birdPrediction, "list")){
-    birdpredsp <- sim$birdPrediction
+    if (time(sim) == start(sim)) {
+      if (names(sim$birdPrediction)[[1]] != paste0("Year", time(sim)))
+      stop("Check the list birdPrediction supplied. This should be a list of years, with the rasters
+           of each species for each year. The names of the outter list (the year list) need to be: 'YearXXXX'")
+    }
+
+    birdpredsp <- sim$birdPrediction[[paste0("Year", time(sim))]]
   } else {
     birdpredsp <-(sim$birdPrediction[[length(sim$birdPrediction)]])
   }
@@ -123,14 +129,12 @@ calcDiversityIndices <- function(sim){
     vect <- raster::getValues(x = eachRas)
     return(vect)
   })
-  
   stk <- raster::stack(birdpredsp)
   cellSizeHA <- prod(res(stk))/10000
   bird.abun <- data.table::data.table(do.call(cbind, bird.abun))
   bird.abun[, Sum := rowSums(bird.abun, na.rm = TRUE)]
   cols <- names(birdpredsp)
   p <- bird.abun[, lapply(.SD, function(sp){sp/Sum}), .SDcols = cols]
-
   shannonRaster <- raster::setValues(raster::raster(birdpredsp[[1]]), values = apply(X = p, MARGIN = 1, shannon))
   simpsonRaster <- raster::setValues(raster::raster(birdpredsp[[1]]), apply(X = p, MARGIN = 1, simpson))
   richnessRaster <- raster::setValues(raster::raster(birdpredsp[[1]]), apply(X = p, MARGIN = 1, richness, cellSizeHA)) #second argument should be cell size
@@ -140,10 +144,11 @@ calcDiversityIndices <- function(sim){
 
   sim$currentDiversityRasters <- stack(shannonRaster,simpsonRaster,richnessRaster) #, raoRaster
   names(sim$currentDiversityRasters) <- c("shannonRaster","simpsonRaster","richnessRaster") #, "raoRaster"
-  
   lapply(names(sim$currentDiversityRasters), function(rasName){
     writeRaster(x = sim$currentDiversityRasters[[rasName]], 
-                filename = file.path(outputPath(sim), paste0(rasName, "_", time(sim))), format = "GTiff")
+                filename = file.path(outputPath(sim), paste0(rasName, "_", time(sim))),
+                overwrite = TRUE,
+                format = "GTiff")
   })
    return(invisible(sim))
 }
@@ -205,13 +210,17 @@ Save <- function(sim){
    if (is(sim$birdPrediction[[1]], "RasterLayer")){
      rtm <- sim$birdPrediction[[1]]
    } else {
-     if (is(sim$birdPrediction, "RasterLayer"))
-     {
-       rtm <- sim$birdPrediction
+     if (is(sim$birdPrediction[[1]][1], "RasterLayer")){
+       rtm <- sim$birdPrediction[[1]][1]
      } else {
-       rtm <- sim$rasterToMatch
+       if (is(sim$birdPrediction, "RasterLayer"))
+       {
+         rtm <- sim$birdPrediction
+       } else {
+         rtm <- sim$rasterToMatch
+       }
      }
-     }
+   }
     sim$caribouArea1 <- prepInputs(url = extractURL("caribouArea1"), studyArea = sim$studyArea,
                                    destinationPath = dataPath(sim), filename2 = NULL,
                                    rasterToMatch = rtm)
