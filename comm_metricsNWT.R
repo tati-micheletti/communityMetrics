@@ -20,6 +20,7 @@ defineModule(sim, list(
   parameters = rbind(
     
     defineParameter("frequency", "numeric", 20, NA, NA, "This describes the simulation time step interval"),
+    defineParameter("overwriteDiversityIndices", "logical", FALSE, NA, NA, "Should this overide the rasters if they already exist for a given year?"),
     #defineParameter(".plotInitialTime", "numeric", 1, NA, NA, "This describes the simulation time at which the first plot event should occur"),
     defineParameter(".plotInterval", "numeric", 1, NA, NA, "This describes the simulation time interval between plot events"),
     defineParameter(".saveInitialTime", "numeric", start(sim), NA, NA, "This describes the simulation time at which the first save event should occur"),
@@ -87,8 +88,6 @@ doEvent.comm_metricsNWT = function(sim, eventTime, eventType) {
          },
         save ={
           sim <- Save(sim)
-          sim <- scheduleEvent(sim, time(sim) + P(sim)$frequency, 
-                                "comm_metricsNWT", "calcDiversity", eventPriority = .last())
           
         },
          warning(paste("Undefined event type: '", current(sim)[1, "eventType", with = FALSE],
@@ -125,35 +124,53 @@ calcDiversityIndices <- function(sim){
   } else {
     birdpredsp <-(sim$birdPrediction[[length(sim$birdPrediction)]])
   }
-  bird.abun <- lapply(X = birdpredsp, function(eachRas){
-    vect <- raster::getValues(x = eachRas)
-    return(vect)
+  
+  haveDiversityRasters <- lapply(c("shannonRaster","simpsonRaster","richnessRaster"), function(rasName){
+    fileExists <- file.exists(file.path(outputPath(sim), paste0(rasName, "_", time(sim), ".tif")))
   })
-  stk <- raster::stack(birdpredsp)
-  cellSizeHA <- prod(res(stk))/10000
-  bird.abun <- data.table::data.table(do.call(cbind, bird.abun))
-  bird.abun[, Sum := rowSums(bird.abun, na.rm = TRUE)]
-  cols <- names(birdpredsp)
-  p <- bird.abun[, lapply(.SD, function(sp){sp/Sum}), .SDcols = cols]
-  shannonRaster <- raster::setValues(raster::raster(birdpredsp[[1]]), values = apply(X = p, MARGIN = 1, shannon))
-  simpsonRaster <- raster::setValues(raster::raster(birdpredsp[[1]]), apply(X = p, MARGIN = 1, simpson))
-  richnessRaster <- raster::setValues(raster::raster(birdpredsp[[1]]), apply(X = p, MARGIN = 1, richness, cellSizeHA)) #second argument should be cell size
-  # SPP <- names(birdpredsp)
-  # dist.m <- sim$dist.m[SPP, SPP]  #requires that all species in p be in dist.m
-  # raoRaster <- raoEntropyC(dist.m, p) # TOOK OUT FOR TIME SAVING FOR NOW:: NEED TO [ FIX ] convert to data.table compatible
-
-  sim$currentDiversityRasters <- stack(shannonRaster,simpsonRaster,richnessRaster) #, raoRaster
-  names(sim$currentDiversityRasters) <- c("shannonRaster","simpsonRaster","richnessRaster") #, "raoRaster"
-  lapply(names(sim$currentDiversityRasters), function(rasName){
-    writeRaster(x = sim$currentDiversityRasters[[rasName]], 
-                filename = file.path(outputPath(sim), paste0(rasName, "_", time(sim))),
-                overwrite = TRUE,
-                format = "GTiff")
-  })
+  if (P(sim)$overwriteDiversityIndices || !all(unlist(haveDiversityRasters))){
+    message(crayon::yellow("Not all diversity rasters exist or overwriteDiversityIndices is TRUE. Creating diversity rasters."))
+    bird.abun <- lapply(X = birdpredsp, function(eachRas){
+      vect <- raster::getValues(x = eachRas)
+      return(vect)
+    })
+    stk <- raster::stack(birdpredsp)
+    cellSizeHA <- prod(res(stk))/10000
+    bird.abun <- data.table::data.table(do.call(cbind, bird.abun))
+    bird.abun[, Sum := rowSums(bird.abun, na.rm = TRUE)]
+    cols <- names(birdpredsp)
+    p <- bird.abun[, lapply(.SD, function(sp){sp/Sum}), .SDcols = cols]
+    shannonRaster <- raster::setValues(raster::raster(birdpredsp[[1]]), values = apply(X = p, MARGIN = 1, shannon))
+    simpsonRaster <- raster::setValues(raster::raster(birdpredsp[[1]]), apply(X = p, MARGIN = 1, simpson))
+    richnessRaster <- raster::setValues(raster::raster(birdpredsp[[1]]), apply(X = p, MARGIN = 1, richness, cellSizeHA)) #second argument should be cell size
+    # SPP <- names(birdpredsp)
+    # dist.m <- sim$dist.m[SPP, SPP]  #requires that all species in p be in dist.m
+    # raoRaster <- raoEntropyC(dist.m, p) # TOOK OUT FOR TIME SAVING FOR NOW:: NEED TO [ FIX ] convert to data.table compatible and 
+    # [ FIX ] for this to go over the rasters first and see if they exist This takes a long time to calculate. Should only be done if needed (have a "overwrite" param too?)
+    
+    sim$currentDiversityRasters <- stack(shannonRaster,simpsonRaster,richnessRaster) #, raoRaster
+    names(sim$currentDiversityRasters) <- c("shannonRaster","simpsonRaster","richnessRaster") #, "raoRaster"
+    lapply(names(sim$currentDiversityRasters), function(rasName){
+      writeRaster(x = sim$currentDiversityRasters[[rasName]], 
+                  filename = file.path(outputPath(sim), paste0(rasName, "_", time(sim))),
+                  overwrite = TRUE,
+                  format = "GTiff")
+    }) 
+  } else {
+    message(crayon::green("All diversity rasters exist and overwriteDiversityIndices is FALSE. Returning existing diversity rasters."))
+  }
    return(invisible(sim))
 }
 
 diversityStats <- function(sim){
+  if (any(is.null(sim$currentDiversityRasters), length(sim$currentDiversityRasters)==0)){
+    sim$currentDiversityRasters <- raster::stack(lapply(c("shannonRaster",
+                                                      "simpsonRaster",
+                                                      "richnessRaster"), function(rasName){
+      ras <- raster::raster(file.path(outputPath(sim), paste0(rasName, "_", time(sim), ".tif")))
+    })
+    )
+  }
   sim$diversityStatistics <- rbind(sim$diversityStats,
                               data.frame(indiceName = names(sim$currentDiversityRasters),
                                          year = rep(time(sim), length(cellStats(sim$currentDiversityRasters, "mean"))),
@@ -166,12 +183,12 @@ diversityStats <- function(sim){
 }
 
 Save <- function(sim){
-  # WRONG. Needs to lapply through the layers 
-  dir <- file.path(outputPath(sim), "diverstiyIndices")
-  dir.create(dir,showWarnings = FALSE)
-  fname <- file.path(dir, paste0("diversityIndicesYear", time(sim),".tif"))
-  writeRaster(sim$currentDiversityRasters, filename=fname,
-               format ="GTiff", overwrite=TRUE)
+#   # WRONG. Needs to lapply through the layers 
+#   dir <- file.path(outputPath(sim), "diverstiyIndices")
+#   dir.create(dir,showWarnings = FALSE)
+#   fname <- file.path(dir, paste0("diversityIndicesYear", time(sim),".tif"))
+#   writeRaster(sim$currentDiversityRasters, filename=fname,
+#                format ="GTiff", overwrite=TRUE)
   return(invisible(sim))
 }
 
