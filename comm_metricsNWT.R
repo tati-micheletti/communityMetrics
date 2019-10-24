@@ -99,9 +99,8 @@ doEvent.comm_metricsNWT = function(sim, eventTime, eventType) {
 Init<- function(sim){
   sim$currentDiversityRasters <- stack()
   #names(sim$currentdiversityRasters) <- c('shannon', 'simpson', 'richness', 'rao_entropy')
-  sim$diversityStatistics <- data.frame(year = integer(), shannon_mean = double(), 
-                                   simpson_mean = double(), richness_mean = double()) #, raoentropy= double()
-  # sim$diversityByPolygon[[as.character(time(sim))]] <- list()
+  sim$diversityStatistics <- list()
+  sim$diversityByPolygon <- list()
   #sim$diversityByPolygon[[paste0("Year", time(sim))]] <- list()
   return (invisible(sim))
 }
@@ -171,14 +170,13 @@ diversityStats <- function(sim){
     })
     )
   }
-  sim$diversityStatistics <- rbind(sim$diversityStats,
-                              data.frame(indiceName = names(sim$currentDiversityRasters),
-                                         year = rep(time(sim), length(cellStats(sim$currentDiversityRasters, "mean"))),
-                                         diversity_mean = cellStats(sim$currentDiversityRasters,"mean")))
-
-  sim$diversityByPolygon[[paste0("Year", as.character(time(sim)))]] <- extract(sim$currentDiversityRasters, 
-                                                                               sim$caribouArea1, fun=mean, na.rm=TRUE)
-  rownames(sim$diversityByPolygon[[paste0("Year", as.character(time(sim)))]]) <- sim$caribouArea1@data$NAME
+  sim$diversityStatistics[[paste0("year", time(sim))]] <- data.table(indiceName = names(sim$currentDiversityRasters),
+                                                                    year = time(sim),
+                                                                    diversity_mean = cellStats(sim$currentDiversityRasters, "mean"))
+  sim$diversityByPolygon[[paste0("year", time(sim))]] <- extract(sim$currentDiversityRasters,
+                                                                 sim$caribouArea1, 
+                                                                 fun = mean, na.rm = TRUE)
+  rownames(sim$diversityByPolygon[[paste0("year", as.character(time(sim)))]]) <- sim$caribouArea1@data$NAME
   return(invisible(sim))
 }
 
