@@ -118,9 +118,9 @@ calcDiversityIndices <- function(sim){
       stop("Check the list birdPrediction supplied. This should be a list of years, with the rasters
            of each species for each year. The names of the outter list (the year list) need to be: 'YearXXXX'")
     }
-
     birdpredsp <- sim$birdPrediction[[paste0("Year", time(sim))]]
   } else {
+    browser()
     birdpredsp <-(sim$birdPrediction[[length(sim$birdPrediction)]])
   }
   
@@ -130,6 +130,8 @@ calcDiversityIndices <- function(sim){
   if (P(sim)$overwriteDiversityIndices || !all(unlist(haveDiversityRasters))){
     message(crayon::yellow("Not all diversity rasters exist or overwriteDiversityIndices is TRUE. Creating diversity rasters."))
     bird.abun <- lapply(X = birdpredsp, function(eachRas){
+      if (is(eachRas, "character"))
+        eachRas <- raster(eachRas)
       vect <- raster::getValues(x = eachRas)
       return(vect)
     })
