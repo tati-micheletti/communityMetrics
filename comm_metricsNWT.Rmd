@@ -135,3 +135,8 @@ In addition, this module produces a two tables with the mean value for each metr
 comm_metricsNWT$diversitystats
 comm_metricsNWT$diversityByPolygon
 ```
+
+# Link to the the SpaDES module's R script
+
+[Here is the SpaDES module's R script](https://github.com/tati-micheletti/communityMetrics/blob/master/comm_metricsNWT.R)
+
