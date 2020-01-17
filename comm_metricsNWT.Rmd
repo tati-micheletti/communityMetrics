@@ -1,23 +1,36 @@
 ---
-title: "comm_metricsNWT"
-author: ""
+title: "Community metrics: SpaDES module"
+author: "Ana Raymundo, Steve Cumming & Tati Micheletti" 
 date: "01 March 2019"
-output: pdf_document
+output:
+  html_document:
+    df_print: paged
 ---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache = FALSE, echo = TRUE, eval = FALSE)
+```
 
 # Overview
 
 The **comm_metricsNWT** module computes a series of community metrics based on the bird predictions for the Northwestern Territories (NWT) ('birdsNWT' module).
 
 The computed metrics are:
+
  * Expected Species Richness*: it is considered as probability of occupancy based on a Poisson distribution. 
+
  $$ S: 1 - \exp^{\lambda}$$  
- where:  $$ exp^{-\lambda} = \frac{exp^{-\lambda}\lambda^k{}{k!} $$
+
+ where:  
+
+ $$ exp^{-\lambda} = \frac{exp^{-\lambda}\lambda^k{}{k!} $$
  
  * Shannon diversity Index*: 
+
  $$ H^' = - \sum_{i=1}^{S} p_ilnp_i $$
 
-where:$$p_i$$ is the proportion of individuals belonging to the ith species.
+where:
+
+$$p_i$$ is the proportion of individuals belonging to the ith species.
 
  * Simpson diversity Index*: 
  $$ 1-D = \sum p_i^2 $$
